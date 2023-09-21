@@ -1,0 +1,23 @@
+{
+    "Name": "HGX H100 8-GPU",
+    "Checks": [
+        {
+            "rule": "MatchAll",
+            "objects":[
+            ],
+            "interface": "xyz.openbmc_project.Inventory.Decorator.Asset",
+            "property": "Model",
+            "value": "NVIDIA HGX H100 8-GPU"
+        }
+    ],
+    "Actions": [
+        {
+            "type": "",
+            "variables": [
+                "GPUMGR_MANIFEST=/run/initramfs/ro/usr/share/gpuoob/oob_manifest_pcie_vulcan.json",
+                "GPUMGR_PROFILE=/run/initramfs/ro/usr/share/gpuoob/oob_profile_vulcan.json",
+                "GPUMGR_PROPERTIES=/run/initramfs/ro/usr/share/gpuoob/oob_properties_vulcan.json"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+option('debug_log', type: 'integer', min : 0, max : 4, value : 0,
+        description : 'Default debug log Level')
