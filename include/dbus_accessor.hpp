@@ -29,6 +29,7 @@ namespace service_name
 constexpr auto objectMapper = "xyz.openbmc_project.ObjectMapper";
 constexpr auto entityManager = "xyz.openbmc_project.EntityManager";
 constexpr auto fruManager = "com.Nvidia.FruManager";
+constexpr auto nsmd = "nsmd.service";
 } // namespace service_name
 
 namespace object_path
