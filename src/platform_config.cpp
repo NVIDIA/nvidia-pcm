@@ -163,7 +163,7 @@ bool Config::performCheckMatchAny()
 int Config::performActions()
 {
     logs_dbg("Perform actions for %s\n", this->name.c_str());
-    int rc;
+    int rc = 0;
     bool fileCreated = false;
     for (platform_actions::Actions_t& action : this->actions)
     {
