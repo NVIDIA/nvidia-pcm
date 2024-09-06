@@ -98,6 +98,7 @@ bool Checks_t::performCheckMatchAny()
 
 bool Checks_t::readAllPropertiesForInterface()
 {
+    auto serviceName = dbus::service_name::fruManager;
     if (this->objects.empty())
     {
         dbus::DBusSubTree subTree;
@@ -117,6 +118,7 @@ bool Checks_t::readAllPropertiesForInterface()
         {
             std::string objectPath = objectAndService.first;
             const auto& serviceAndInterface = objectAndService.second;
+
             for (auto const& [service, interfaces] : serviceAndInterface)
             {
                 logs_dbg("Checking D-Bus Object Path %s Service: %s\n", objectPath.c_str(), service.c_str());
@@ -124,6 +126,13 @@ bool Checks_t::readAllPropertiesForInterface()
                 {
                     logs_dbg("D-Bus Object Path: %s is valid.\n", objectPath.c_str());
                     this->objects.push_back(objectPath);
+                    break;
+                }
+                else if (service == dbus::service_name::nsmd)
+                {
+                    logs_dbg("D-Bus Object Path: %s is valid.\n", objectPath.c_str());
+                    this->objects.push_back(objectPath);
+                    serviceName = dbus::service_name::nsmd;
                     break;
                 }
             }
@@ -140,19 +149,19 @@ bool Checks_t::readAllPropertiesForInterface()
         dbus::DBusValue value;
         try
         {
-            dbus::getProperty(dbus::service_name::fruManager, objectPath, this->interface, this->property, value);
+            dbus::getProperty(serviceName, objectPath, this->interface, this->property, value);
         }
         catch(const std::exception& e)
         {
             logs_err("Exception occurred while running D-Bus Get-Property for Service:%s, ObjectPath:%s, Interface:%s, Property:%s. Exception: %s\n",
-                        dbus::service_name::fruManager, 
+                        serviceName,
                         objectPath.c_str(),
                         this->interface.c_str(),
                         this->property.c_str(), e.what());
             return false;
         }
         logs_dbg("Get D-Bus Property, Service:%s, ObjectPath:%s, Interface:%s, Property:%s, Value:%s\n",
-                                dbus::service_name::fruManager, 
+                                serviceName,
                                 objectPath.c_str(),
                                 this->interface.c_str(),
                                 this->property.c_str(),
