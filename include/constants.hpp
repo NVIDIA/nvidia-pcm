@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,14 @@ namespace constants
 {
 const std::string PCM_ENV_FILE = "/etc/default/nvidia-pcm";
 const std::string PCM_DATA_DIR = "/usr/share/nvidia-pcm/";
-const std::string DEFAULT_CONF_FILE_NAME = "default_platform_configuration.json";
-const std::string PCM_PLATFORM_CONF_PATH = PCM_DATA_DIR + "platform-configuration-files/";
-const std::string PCM_DEFAULT_PLATFORM_CONF_FILE = PCM_DATA_DIR + DEFAULT_CONF_FILE_NAME;
+const std::string DEFAULT_CONF_FILE_NAME =
+    "default_platform_configuration.json";
+const std::string PCM_PLATFORM_CONF_PATH = PCM_DATA_DIR +
+                                           "platform-configuration-files/";
+const std::string PCM_DEFAULT_PLATFORM_CONF_FILE = PCM_DATA_DIR +
+                                                   DEFAULT_CONF_FILE_NAME;
 
-constexpr auto MATCH_ALL="matchall";
-constexpr auto MATCH_ONE="matchone";
+constexpr auto MATCH_ALL = "matchall";
+constexpr auto MATCH_ONE = "matchone";
 
 } // namespace constants

@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,75 +35,67 @@ namespace platform_config
 
 class Config
 {
-    public:
-        /** @brief Name of the Platform **/
-        std::string name;
+  public:
+    /** @brief Name of the Platform **/
+    std::string name;
 
-        /** @brief Rule to be followed for the checks
-         *  MatchAll: All of the checks need to be true.
-         *  MatchAny: Any of the checks need to be true.
-        */
-       std::string rule;
+    /** @brief Rule to be followed for the checks
+     *  MatchAll: All of the checks need to be true.
+     *  MatchAny: Any of the checks need to be true.
+     */
+    std::string rule;
 
-        /** @brief Array containing all the necessary checks**/
-        std::vector<platform_checks::Checks_t> checks;
+    /** @brief Array containing all the necessary checks**/
+    std::vector<platform_checks::Checks_t> checks;
 
-        /** @brief Actions to perform once the checks have passed **/
-        std::vector<platform_actions::Actions_t> actions;
+    /** @brief Actions to perform once the checks have passed **/
+    std::vector<platform_actions::Actions_t> actions;
 
-    public:
+  public:
+    /** @brief Load class contents from JSON profile
+     *
+     * Wrapper method for loadFrom
+     *
+     * @param[in]  eventMap
+     * @param[in]  file
+     *
+     */
+    bool loadFromFile(const std::string& file);
 
-        /** @brief Load class contents from JSON profile
-         *
-         * Wrapper method for loadFrom
-         *
-         * @param[in]  eventMap
-         * @param[in]  file
-         *
-         */
-        bool loadFromFile(const std::string& file);
+    /** @brief Load class contents from JSON profile
+     *
+     *  @param[in]  j - json object
+     *
+     */
+    void loadFrom(const json& j);
 
-        /** @brief Load class contents from JSON profile
-         *
-         *  @param[in]  j - json object
-         * 
-         */
-        void loadFrom(const json& j);
+    /** @brief Dumps current object class content to stdout
+     */
+    std::string print(void) const;
 
+    /** @brief Perform checks in Checks_t struct
+     *
+     * Wrapper method for platform_checks::Checks_t.performChecks()
+     *
+     */
+    bool performChecks();
 
-        /** @brief Dumps current object class content to stdout
-         */
-        std::string print(void) const;
+    /** @brief Perform the check to Match All of the checks in Checks vector*/
+    bool performCheckMatchAll();
 
-        /** @brief Perform checks in Checks_t struct
-         *
-         * Wrapper method for platform_checks::Checks_t.performChecks()
-         *
-         */
-        bool performChecks();
+    /** @brief Perform the check to Match Any of the checks in Checks vector*/
+    bool performCheckMatchAny();
 
-        /** @brief Perform the check to Match All of the checks in Checks vector*/
-        bool performCheckMatchAll();
+    /** @brief Perform actions in actions_t struct
+     *
+     * Wrapper method for platform_actions::actions_t.performActions()
+     *
+     */
+    int performActions();
 
-        /** @brief Perform the check to Match Any of the checks in Checks vector*/
-        bool performCheckMatchAny();
-
-
-        /** @brief Perform actions in actions_t struct
-         *
-         * Wrapper method for platform_actions::actions_t.performActions()
-         *
-         */
-        int performActions();
-
-
-        /** @brief Match Name from Platform Config to the argument name
-         */
-        bool matchName(const std::string& name);
-
+    /** @brief Match Name from Platform Config to the argument name
+     */
+    bool matchName(const std::string& name);
 };
 
-
-
 } // namespace platform_config
-

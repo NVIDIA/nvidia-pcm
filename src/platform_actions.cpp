@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -24,7 +23,6 @@
 #include "platform_actions.hpp"
 #include "constants.hpp"
 #include "log.hpp"
-
 
 namespace fs = std::filesystem;
 
@@ -38,30 +36,33 @@ int Actions_t::performActions(const std::string& name, bool& fileCreated)
     std::ofstream envFile;
     if (fileCreated)
     {
-        logs_dbg("Opening Environment File: %s\n", constants::PCM_ENV_FILE.c_str());
-        envFile.open(constants::PCM_ENV_FILE, std::ofstream::out | std::ofstream::app);
+        logs_dbg("Opening Environment File: %s\n",
+                 constants::PCM_ENV_FILE.c_str());
+        envFile.open(constants::PCM_ENV_FILE,
+                     std::ofstream::out | std::ofstream::app);
     }
     else
     {
-        logs_dbg("Creating and Opening Environment File: %s\n", constants::PCM_ENV_FILE.c_str());
-        envFile.open(constants::PCM_ENV_FILE, std::ofstream::out | std::ofstream::trunc);
-        fileCreated=true;
+        logs_dbg("Creating and Opening Environment File: %s\n",
+                 constants::PCM_ENV_FILE.c_str());
+        envFile.open(constants::PCM_ENV_FILE,
+                     std::ofstream::out | std::ofstream::trunc);
+        fileCreated = true;
 
         // set the permission of the file to 664
         // Read and write for owner
         // Read and write for group
         // Read for others
         logs_dbg("Setting permissions to the EnvironmentFile.\n");
-        fs::perms permission = fs::perms::owner_write |
-                                            fs::perms::owner_read |
-                                            fs::perms::group_read |
-                                            fs::perms::group_write |
-                                            fs::perms::others_read;
+        fs::perms permission = fs::perms::owner_write | fs::perms::owner_read |
+                               fs::perms::group_read | fs::perms::group_write |
+                               fs::perms::others_read;
         fs::permissions(constants::PCM_ENV_FILE, permission);
     }
     if (!envFile.good())
     {
-        logs_err("Failed to open Environment File: %s\n", constants::PCM_ENV_FILE.c_str());
+        logs_err("Failed to open Environment File: %s\n",
+                 constants::PCM_ENV_FILE.c_str());
         return 1;
     }
 
@@ -70,7 +71,7 @@ int Actions_t::performActions(const std::string& name, bool& fileCreated)
     envFile << "NAME=" << name << std::endl;
 
     // Access Variables and add all the Env variables to the Env file
-    // e.g. 
+    // e.g.
     // AML_DAT=/usr/share/oobaml/...
     // AML_EVENT_INFO=/usr/share/oobaml/...
     for (const auto& variable : this->variables)
@@ -79,10 +80,10 @@ int Actions_t::performActions(const std::string& name, bool& fileCreated)
         envFile << variable << std::endl;
         if (!envFile.good())
         {
-            logs_err("Failed to write variable to Environment File, Aborting.\n");
+            logs_err(
+                "Failed to write variable to Environment File, Aborting.\n");
             return 2;
         }
-
     }
 
     logs_dbg("Closing Environment File.\n");
@@ -95,7 +96,6 @@ int Actions_t::performActions(const std::string& name, bool& fileCreated)
 
     logs_dbg("All Actions performed.\n");
     return rc;
-
 }
 
-} //namespace platform_actions
+} // namespace platform_actions

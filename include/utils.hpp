@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,34 +17,33 @@
 
 #pragma once
 
-#include <iostream>
-#include <string>
 #include <fstream>
+#include <iostream>
 #include <sstream>
-
+#include <string>
 
 namespace utils
 {
 
-const std::string readFileAndFindVariable(const std::string file, const std::string variable)
+const std::string readFileAndFindVariable(const std::string file,
+                                          const std::string variable)
 {
-    std::ifstream f (file);
+    std::ifstream f(file);
     std::string line;
     while (std::getline(f, line))
     {
-        //Find if line contains variable=
-        // e.g. NAME=
+        // Find if line contains variable=
+        //  e.g. NAME=
         std::string delimiter = "=";
         size_t found = line.find(variable + delimiter);
         if (found != std::string::npos)
         {
-            auto pos=line.find("=");
-            auto name = line.substr(pos+1, line.length());
+            auto pos = line.find("=");
+            auto name = line.substr(pos + 1, line.length());
             return name;
         }
     }
     return "";
-
 }
 
-} //namespace utils
+} // namespace utils

@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 
 #include <iostream>
 #include <filesystem>
@@ -78,26 +76,25 @@ static cmd_line::CmdLineArgs cmdLineArgs = {
     {"-h", "--help", cmd_line::OptFlag::none, "", cmd_line::ActFlag::exclusive,
      "This help.",
      []([[maybe_unused]] cmd_line::ArgFuncParamType params) -> int {
-         configuration.helpOptSet = true;
-         return 0;
-     }},
+    configuration.helpOptSet = true;
+    return 0;
+}},
     {"-d", "--data-dir", cmd_line::OptFlag::overwrite, "<directory>",
-     cmd_line::ActFlag::mandatory, "Nvidia-PCM Data Directory. e.g. /usr/share/nvidia-pcm", loadDataDir},
+     cmd_line::ActFlag::mandatory,
+     "Nvidia-PCM Data Directory. e.g. /usr/share/nvidia-pcm", loadDataDir},
     {"-l", "--log-level", cmd_line::OptFlag::overwrite, "<level>",
      cmd_line::ActFlag::normal, "Debug Log Level [0-4].", setLogLevel},
-     {"-s", "--skip-checks", cmd_line::OptFlag::none, "",
-     cmd_line::ActFlag::normal, "Skip platform checks on reboots.", 
+    {"-s", "--skip-checks", cmd_line::OptFlag::none, "",
+     cmd_line::ActFlag::normal, "Skip platform checks on reboots.",
      []([[maybe_unused]] cmd_line::ArgFuncParamType params) -> int {
-         configuration.skipChecks = true;
-         return 0;
-     }}};
-
-
+    configuration.skipChecks = true;
+    return 0;
+}}};
 
 int showHelp()
 {
-    std::cout << "NVIDIA Platform Configuration Manager service, ver = " << APPVER
-         << "\n";
+    std::cout << "NVIDIA Platform Configuration Manager service, ver = "
+              << APPVER << "\n";
     std::cout << "<usage>\n";
     std::cout << "  ./" << APPNAME << " [options]\n";
     std::cout << "\n";
@@ -113,7 +110,7 @@ int main(int argc, char* argv[])
     logs_info("Default log level: %d. Current log level: %d\n", DEF_DBG_LEVEL,
               getLogLevel(logger.getLevel()));
     int rc = 0;
-    
+
     try
     {
         cmd_line::CmdLine cmdLine(argc, argv, cmdLineArgs);
@@ -126,9 +123,11 @@ int main(int argc, char* argv[])
         showHelp();
         return rc ? rc : 1; // ensure exit is always non-zero
     }
-    const std::string PCM_PLATFORM_CONF_PATH = configuration.data_dir + "platform-configuration-files/";
-    const std::string PCM_DEFAULT_PLATFORM_CONF_FILE = configuration.data_dir + constants::DEFAULT_CONF_FILE_NAME;
-    
+    const std::string PCM_PLATFORM_CONF_PATH = configuration.data_dir +
+                                               "platform-configuration-files/";
+    const std::string PCM_DEFAULT_PLATFORM_CONF_FILE =
+        configuration.data_dir + constants::DEFAULT_CONF_FILE_NAME;
+
     //
     // 1. Check if EnvironmentFile exists:
     //      a. If does not exist, do not enter the block
@@ -136,7 +135,8 @@ int main(int argc, char* argv[])
     // 2. Read the Environment File and find variable NAME
     //      a. If variable not found, exit block.
     //      b. If found, continue to step 3.
-    // 3. Iterate over all the platform configuration files and match the "Name" key in the config files with NAME variable read in step 2.
+    // 3. Iterate over all the platform configuration files and match the "Name"
+    // key in the config files with NAME variable read in step 2.
     //      a. If no match, exit block.
     //      b. If match, continue to step 4.
     // 4. Only Perform Actions for the matched platform config file
@@ -145,105 +145,135 @@ int main(int argc, char* argv[])
     //
     try
     {
-        if (configuration.skipChecks == true &&  fs::exists(constants::PCM_ENV_FILE))
+        if (configuration.skipChecks == true &&
+            fs::exists(constants::PCM_ENV_FILE))
         {
             logs_dbg("Environment File exists, Reading variable NAME.\n");
-            auto name = utils::readFileAndFindVariable(constants::PCM_ENV_FILE, "NAME");
+            auto name = utils::readFileAndFindVariable(constants::PCM_ENV_FILE,
+                                                       "NAME");
             if (!name.empty())
             {
                 logs_dbg("Found Env Variable NAME=%s\n", name.c_str());
-                logs_dbg("Iterating over Platform Configuration files in directory: %s\n", PCM_PLATFORM_CONF_PATH.c_str());
+                logs_dbg(
+                    "Iterating over Platform Configuration files in directory: %s\n",
+                    PCM_PLATFORM_CONF_PATH.c_str());
                 // 1. Iterate over all the platform configuration files
                 // 2. Match the key Name in the config file to NAME variable
-                // 3. Perform actions for the matched platform configuration file
-                for (auto& file: fs::directory_iterator(PCM_PLATFORM_CONF_PATH))
+                // 3. Perform actions for the matched platform configuration
+                // file
+                for (auto& file :
+                     fs::directory_iterator(PCM_PLATFORM_CONF_PATH))
                 {
-                    logs_dbg("Iterating Platform Config file: %s\n", file.path().c_str());
+                    logs_dbg("Iterating Platform Config file: %s\n",
+                             file.path().c_str());
                     platform_config::Config platformConfig;
                     if (!platformConfig.loadFromFile(file.path()))
                     {
-                        logs_err("Unable to access Platform Config file: %s\n", file.path().c_str());
+                        logs_err("Unable to access Platform Config file: %s\n",
+                                 file.path().c_str());
                         continue;
                     }
 
-                    // Check if Name key in Platform config file matches variable NAME
+                    // Check if Name key in Platform config file matches
+                    // variable NAME
                     if (platformConfig.matchName(name))
                     {
                         // Perform actions for the matched Platform config file
                         int rc = platformConfig.performActions();
-                        if (rc !=0)
+                        if (rc != 0)
                         {
                             logs_err("Unable to perform actions, rc=%d\n", rc);
                             break;
                         }
-                        logs_err("Successfully loaded platform configuration: %s, Exiting.\n", platformConfig.name.c_str());
+                        logs_err(
+                            "Successfully loaded platform configuration: %s, Exiting.\n",
+                            platformConfig.name.c_str());
                         return 0;
                     }
                 }
             }
         }
-    } catch (const std::exception &e) 
+    }
+    catch (const std::exception& e)
     {
         logs_err("Exception occurred: %s\n", e.what());
     }
 
     try
     {
-        logs_dbg("Iterating over Platform Configuration files in directory: %s\n", PCM_PLATFORM_CONF_PATH.c_str());
+        logs_dbg(
+            "Iterating over Platform Configuration files in directory: %s\n",
+            PCM_PLATFORM_CONF_PATH.c_str());
         // 1. Iterate over all the platform configuration files
         // 2. Perform checks for each file
         // 3. Perform actions for the matched platform configuration file
-        for (auto& file: fs::directory_iterator(PCM_PLATFORM_CONF_PATH))
+        for (auto& file : fs::directory_iterator(PCM_PLATFORM_CONF_PATH))
         {
-            logs_dbg("Iterating Platform Config file: %s\n", file.path().c_str());
+            logs_dbg("Iterating Platform Config file: %s\n",
+                     file.path().c_str());
             platform_config::Config platformConfig;
 
             if (!platformConfig.loadFromFile(file.path()))
             {
-                logs_err("Unable to access Platform Config file: %s\n", file.path().c_str());
+                logs_err("Unable to access Platform Config file: %s\n",
+                         file.path().c_str());
                 continue;
             }
 
             if (platformConfig.performChecks())
             {
                 int rc = platformConfig.performActions();
-                if (rc !=0)
+                if (rc != 0)
                 {
                     break;
                 }
-                logs_err("Successfully loaded platform configuration: %s, Exiting.\n", platformConfig.name.c_str());
+                logs_err(
+                    "Successfully loaded platform configuration: %s, Exiting.\n",
+                    platformConfig.name.c_str());
                 return 0;
             }
         }
-    } catch (const std::exception &e) 
+    }
+    catch (const std::exception& e)
     {
         logs_err("Exception occurred: %s\n", e.what());
     }
 
-    // If we are here, that means None of the Platform Configuration File matched the current running platform
-    // We would load Default Platform Configuration File
+    // If we are here, that means None of the Platform Configuration File
+    // matched the current running platform We would load Default Platform
+    // Configuration File
     platform_config::Config defaultPlatformConfig;
 
-    logs_dbg("Loading Default platform configuration file: %s\n", PCM_DEFAULT_PLATFORM_CONF_FILE.c_str());
+    logs_dbg("Loading Default platform configuration file: %s\n",
+             PCM_DEFAULT_PLATFORM_CONF_FILE.c_str());
 
     try
     {
         if (!defaultPlatformConfig.loadFromFile(PCM_DEFAULT_PLATFORM_CONF_FILE))
         {
-            logs_err("Unable to access Default platform config file: %s. Expect system to be in degraded state.\n", PCM_DEFAULT_PLATFORM_CONF_FILE.c_str());
+            logs_err(
+                "Unable to access Default platform config file: %s. Expect system to be in degraded state.\n",
+                PCM_DEFAULT_PLATFORM_CONF_FILE.c_str());
             return 1;
         }
         rc = defaultPlatformConfig.performActions();
-        if (rc !=0)
+        if (rc != 0)
         {
-            logs_err("Unable to perform Actions for the Default platform config file: %s. Expect system to be in degraded state.\n", PCM_DEFAULT_PLATFORM_CONF_FILE.c_str());
+            logs_err(
+                "Unable to perform Actions for the Default platform config file: %s. Expect system to be in degraded state.\n",
+                PCM_DEFAULT_PLATFORM_CONF_FILE.c_str());
             return 1;
         }
-    } catch (const std::exception &e) 
+    }
+    catch (const std::exception& e)
     {
-        logs_err("Exception occurred while loading Default Platform Configuration file: %s\n", e.what());
+        logs_err(
+            "Exception occurred while loading Default Platform Configuration file: %s\n",
+            e.what());
     }
 
-    logs_err("Successfully loaded default platform configuration: %s, Exiting.\n", defaultPlatformConfig.name.c_str());
+    logs_err(
+        "Successfully loaded default platform configuration: %s, Exiting.\n",
+        defaultPlatformConfig.name.c_str());
     return 0;
 }
