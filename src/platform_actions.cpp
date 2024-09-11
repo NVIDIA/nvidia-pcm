@@ -15,15 +15,14 @@
  * limitations under the License.
  */
 
-#include "platform_actions.hpp"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <filesystem>
 
+#include "platform_actions.hpp"
 #include "constants.hpp"
 #include "log.hpp"
-
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
 
 namespace fs = std::filesystem;
 

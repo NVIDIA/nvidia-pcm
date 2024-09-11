@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-#include "cmd_line.hpp"
-#include "constants.hpp"
-#include "log.hpp"
+#include <iostream>
+#include <filesystem>
+#include <string>
+
 #include "platform_config.hpp"
 #include "utils.hpp"
-
-#include <filesystem>
-#include <iostream>
-#include <string>
+#include "log.hpp"
+#include "constants.hpp"
+#include "cmd_line.hpp"
 
 namespace fs = std::filesystem;
 
