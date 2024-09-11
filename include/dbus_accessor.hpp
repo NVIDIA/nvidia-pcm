@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,9 @@
  * limitations under the License.
  */
 
-
 #pragma once
 
 #include "dbus_types.hpp"
-
 
 namespace dbus
 {
@@ -84,9 +82,7 @@ constexpr auto bootRawProgress = "xyz.openbmc_project.State.Boot.Raw";
  * @param[in] interface - The D-Bus interface
  */
 DBusService getService(const std::string& objectPath,
-                        const std::string& interface);
-
-
+                       const std::string& interface);
 
 /**
  * @brief Wrapper for the 'Get' properties method call
@@ -98,10 +94,8 @@ DBusService getService(const std::string& objectPath,
  * @param[out] value - Filled in with the property value.
  */
 void getProperty(const std::string& service, const std::string& objectPath,
-                    const std::string& interface, const std::string& property,
-                    DBusValue& value);
-
-
+                 const std::string& interface, const std::string& property,
+                 DBusValue& value);
 
 /**
  * @brief Wrapper for the 'GetAll' properties method call
@@ -113,8 +107,8 @@ void getProperty(const std::string& service, const std::string& objectPath,
  * @return DBusPropertyMap - The property results
  */
 DBusPropertyMap getAllProperties(const std::string& service,
-                                    const std::string& objectPath,
-                                    const std::string& interface);
+                                 const std::string& objectPath,
+                                 const std::string& interface);
 
 /**
  * @brief Finds all D-Bus paths that contain any of the interfaces
@@ -126,7 +120,6 @@ DBusPropertyMap getAllProperties(const std::string& service,
  */
 DBusPathList getPaths(const DBusInterfaceList& interfaces);
 
-
 /**
  * @brief Finds all D-Bus sub-tree that contain any of the interfaces
  *        passed in, by using GetSubTree.
@@ -137,4 +130,4 @@ DBusPathList getPaths(const DBusInterfaceList& interfaces);
  */
 DBusSubTree getSubTree(const std::string& interface);
 
-} //namespace dbus
+} // namespace dbus

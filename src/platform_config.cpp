@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Copyright (c) 2023-2024 NVIDIA CORPORATION &
+ * AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-
 #include "platform_config.hpp"
 
+#include "constants.hpp"
+#include "log.hpp"
+
+#include <boost/algorithm/string.hpp>
+
+#include <fstream>
 #include <map>
 #include <string>
 #include <vector>
-#include <fstream>
-
-#include <boost/algorithm/string.hpp>
-#include "log.hpp"
-#include "constants.hpp"
 
 namespace platform_config
 {
@@ -50,21 +50,21 @@ bool Config::loadFromFile(const std::string& file)
 
 void Config::loadFrom(const json& j)
 {
-    this->name=j.at("Name");
-    this->rule=j.value("Rule", "");
+    this->name = j.at("Name");
+    this->rule = j.value("Rule", "");
 
     for (auto& check : j.at("Checks"))
     {
         platform_checks::Checks_t check_t;
-        check_t.rule=check.value("rule", "");
-        check_t.interface=check.at("interface");
-        check_t.property=check.at("property");
-        check_t.value=check.at("value");
-        for (auto& object: check.at("objects"))
+        check_t.rule = check.value("rule", "");
+        check_t.interface = check.at("interface");
+        check_t.property = check.at("property");
+        check_t.value = check.at("value");
+        for (auto& object : check.at("objects"))
         {
             check_t.objects.push_back(object);
         }
-        
+
         this->checks.push_back(check_t);
     }
 
@@ -105,7 +105,7 @@ bool Config::performChecks()
 
     if (this->rule == "")
     {
-        this->rule=constants::MATCH_ALL;
+        this->rule = constants::MATCH_ALL;
     }
 
     logs_dbg("Rule: %s\n", this->rule.c_str());
@@ -113,7 +113,7 @@ bool Config::performChecks()
     std::string rule = boost::algorithm::to_lower_copy(this->rule);
 
     if (rule == constants::MATCH_ALL)
-    {   
+    {
         return this->performCheckMatchAll();
     }
     if (rule == constants::MATCH_ONE)
@@ -123,7 +123,6 @@ bool Config::performChecks()
 
     logs_err("Invalid Check Rule: %s\n", this->rule.c_str());
     return false;
-    
 }
 
 bool Config::performCheckMatchAll()
@@ -178,10 +177,10 @@ int Config::performActions()
 
 bool Config::matchName(const std::string& name)
 {
-    logs_dbg("Match name from platform config %s and argument NAME=%s\n", this->name.c_str(), name.c_str());
-    
+    logs_dbg("Match name from platform config %s and argument NAME=%s\n",
+             this->name.c_str(), name.c_str());
+
     return (this->name == name);
-    
 }
 
 } // namespace platform_config
