@@ -17,15 +17,14 @@
 
 #include "platform_config.hpp"
 
-#include "constants.hpp"
-#include "log.hpp"
-
-#include <boost/algorithm/string.hpp>
-
-#include <fstream>
 #include <map>
 #include <string>
 #include <vector>
+#include <fstream>
+
+#include <boost/algorithm/string.hpp>
+#include "log.hpp"
+#include "constants.hpp"
 
 namespace platform_config
 {
