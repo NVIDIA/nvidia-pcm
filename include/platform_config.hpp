@@ -17,16 +17,15 @@
 
 #pragma once
 
+#include "platform_actions.hpp"
+#include "platform_checks.hpp"
+
+#include <nlohmann/json.hpp>
+
+#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include <iostream>
-
-#include "platform_checks.hpp"
-#include "platform_actions.hpp"
-
-
-#include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 

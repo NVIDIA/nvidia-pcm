@@ -24,6 +24,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 namespace cmd_line
 {
