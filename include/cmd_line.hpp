@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <iomanip>
 #include <iostream>
@@ -24,7 +25,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 namespace cmd_line
 {
