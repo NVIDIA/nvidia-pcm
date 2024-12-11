@@ -141,12 +141,12 @@ bool Checks_t::readAllPropertiesForInterface()
                     this->objects.push_back(objectPath);
                     break;
                 }
-                else if (service == dbus::service_name::nsmd)
+                else if (service == dbus::service_name::fruDevice)
                 {
                     logs_dbg("D-Bus Object Path: %s is valid.\n",
                              objectPath.c_str());
                     this->objects.push_back(objectPath);
-                    serviceName = dbus::service_name::nsmd;
+                    serviceName = dbus::service_name::fruDevice;
                     break;
                 }
             }
